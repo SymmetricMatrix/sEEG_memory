@@ -4,8 +4,8 @@ Code for sEEG analysis
 
 ## Main Executive Function Description
 1. check_data.m
-2. object_pre.m / sequence_pre.m
-3.
+2. main_process.m
+
 
 ## Data preprocesse
 ### object
