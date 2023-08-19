@@ -50,7 +50,7 @@ end
 yline(0,'--')
 idx = find(pic_corr_h == 1);
 plot(idx, ones(size(idx))*max(mean(rsa_same,2))*1.2, 'o', 'MarkerSize',3.5,'MarkerFaceColor',deep_red,'MarkerEdgeColor', deep_red)
-ylabel('correlation')
+ylabel('Fisher Z')
 legend('Same picture','','Different picture','','','p<0.05')
 
 subplot(2, 1, 2)
@@ -68,7 +68,7 @@ elseif time_dim == 2
     title([subject,': RSA same-diff(Object)'])
 end
 yline(0,'--')
-ylabel('correlation')
+ylabel('Fisher Z')
 
 set(gcf, 'Position', plot_window);
 end

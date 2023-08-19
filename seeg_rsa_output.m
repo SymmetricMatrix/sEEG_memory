@@ -1,4 +1,4 @@
-function seeg_rsa(data1,data2,subject, proj, freq, save_dir)
+function rsa = seeg_rsa_output(data1,data2,subject, proj, freq)
 % Calculate RSA for object recognition or object2sequence
 % Inputs:
 %   subject: subject ID
@@ -13,7 +13,9 @@ function seeg_rsa(data1,data2,subject, proj, freq, save_dir)
 %        obj2seq: rsa = struct('same', [], 'diff', [], 'label', 'round', []);
 
 %% Parameter setting
-
+if isempty(data1) || isempty(data2)
+    error('Both data1 and data2 cannot be non-empty');
+end
 % Determine where the picture appears
 obj_pic = 51:165; % original [-2,3], save [-0.5,1.5], pic [0,1.15]
 seq_pic = 251:500;% original [-5,7], save [-2.5,5], pic [0,2.5]
@@ -38,8 +40,7 @@ switch proj
             rsa.diff{lag} = calculate_rsa(data1(:, freq, :, :), data2(:, freq, :, :), pic_match_diff);
             rsa.label.diff{lag} = pic_match_diff;
         end
-        
-        save(fullfile(save_dir, [subject, '_obj_rsa.mat']), 'rsa', '-v7.3'); 
+
     case 'sequence_memory'
         % initialize rsa
         rsa = struct('same', [], 'label', []);
@@ -50,8 +51,6 @@ switch proj
         pic_match_same= [seq_code,seq_code];
         rsa.same = calculate_rsa(data1(:, freq, seq_pic, :), data2(:, freq, :, :), pic_match_same);
         rsa.label.same = pic_match_same;
-        
-        save(fullfile(save_dir, [subject, '_sequence_rsa.mat']), 'rsa', '-v7.3');
 
     case 'obj2seq'
         % initialize rsa
@@ -79,9 +78,6 @@ switch proj
         rsa.same = mean(cat(4, rsa.round.same{:}), 4);
         rsa.diff = mean(cat(4, rsa.round.diff{:}), 4);
         
-        save_dir = fullfile(save_dir, subject);
-        mkdir(save_dir)
-        save(fullfile(save_dir, [subject, '_obj2seq_rsa.mat']), 'rsa', '-v7.3');
         
     otherwise
         error('proj input is wrong')

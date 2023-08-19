@@ -1,4 +1,4 @@
-function [temp3,temp4] = plt_rsa_freq_sd_obj(rsa_same,rsa_diff,subject,lag,plot_window,temp3,temp4)  
+function [temp3,temp4] = plt_rsa_obj_sd_freq(rsa_same,rsa_diff,subject,lag,plot_window,temp3,temp4)  
   figure
     subplot(221)
     imagesc(mean(rsa_same,3))

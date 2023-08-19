@@ -1,4 +1,4 @@
-function plt_rsa_diag_obj_backup(rsa_same,rsa_diff,subject,lag,plot_window)
+function plt_rsa_obj_diag(rsa_same,rsa_diff,subject,lag,plot_window)
 % This function plots the RSA diagonal and different picture RSA for a given subject and lag.
 % 1. paired t-test(p<0.05)
 % 2. RSA diagonal of same pic pair and different pic pair
@@ -36,27 +36,6 @@ for i=1:size(rsa_same,1)
 end
 
 figure
-
-subplot(121)
-% binarize p-values and plot as image
-pic_corr_p(pic_corr_p>0.05)=1;
-pic_corr_p(pic_corr_p<=0.05)=0;
-pic_corr_p = -pic_corr_p+1;%pic_corr_p<=0.05 present 1
-pmapthresh=logical(pic_corr_p);
-imagesc(pic_corr_p)
-hold on
-contour(pmapthresh,1,'linecolor','k')
-yticks(0:25:200);
-yticklabels([-50:25:150]/100);
-ylabel('1st present pic /s')
-xticks(0:25:200);
-xticklabels([-50:25:150]/100);
-xlabel('2nd present pic /s')
-title([subject,':  different picture RSA(lag=',num2str(lag),')'])
-axis square
-colorbar()
-
-subplot(122)
 % plot RSA diagonal with confidence intervals
 plot_ci(rsa_same_diag',red,0.05)
 hold on
@@ -74,16 +53,7 @@ idx = find(diag_corr == 1);
 plot(idx, ones(size(idx))*max(mean([rsa_same_diag,rsa_diff_diag],2))*1.2, 'o', 'MarkerSize',3.5,'MarkerFaceColor',deep_red,'MarkerEdgeColor', deep_red)
 legend('Same picture','','Different picture','','p<0.05')
 
-sgtitle([subject,': different picture RSA diag(lag=',num2str(lag),')'])
-
-% Adjust the height of the subplots
-subplot(1, 2, 1)
-pos1 = get(gca, 'Position');
-subplot(1, 2, 2)
-pos2 = get(gca, 'Position');
-pos2(2) = pos1(2);
-pos2(4) = pos1(4);
-set(gca, 'Position', pos2)
+title([subject,': different picture RSA diag(lag=',num2str(lag),')'])
 
 set(gcf, 'Position', plot_window);
 end

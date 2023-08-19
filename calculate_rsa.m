@@ -26,6 +26,6 @@ for j = 1:size(pic_pair, 1) % paired
     pic_corr(:, :, j) = corr(rr1, rr2, 'type', 'spearman');
 end
 
-% Modify correlation values using the atanh function
+% Modify correlation values trans to Fisher Z using the atanh function
 pic_corr = atanh(pic_corr);
 end

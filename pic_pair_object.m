@@ -20,8 +20,7 @@ function [pic_idx,pic_labels,pic_label_all] = pic_pair_object(subject,type,lag,f
 % Dependent data:
 %   The function reads the "object.csv" file located at '/bigvault/Projects/seeg_pointing/gather/Tabel/object.csv'.
 
-if (nargin<3)
-    lag=1;
+if (nargin<4)
     flag=12;
 end
 

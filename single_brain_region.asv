@@ -51,9 +51,7 @@ for sub_id=1:17
                     data2 = data1;
                     rsa = seeg_rsa_output(data1,data2,subject, proj, freq);
                     rsa_group.obj.same{sub_id} = mean(rsa.same,3);
-                    for lag =1:20
-                        rsa_group.obj.diff{sub_id,lag} = mean(rsa.diff{lag},3);
-                    end
+                    rsa_group.obj.diff{sub_id} = mean(rsa.diff,3);
                     rsa_group.obj.label{sub_id} = rsa.label;
                     
                 case 'sequence_memory'
@@ -73,7 +71,7 @@ for sub_id=1:17
             end
         catch ME
             % display the error message
-            disp([num2str(sub_id),'----------error-------'])
+            disp([num2str(sub_id),'----------error-------'])*--
             disp(ME.message)
             % skip the current loop
             continue
@@ -83,41 +81,35 @@ end
 %% plot all result
 
 % parameter setting
-subject='Hippocampus Group';
+subject='group';
 plot_window=[1 25 1920 1080];
 method = 'sigrank';
 
 %% obj data 
-[rsa_same, idx] = cell2matrix(rsa_group.obj.same);
+rsa_same = cell2matrx(rsa_group.obj.same);
 lag = 1;
-rsa_diff = cell2matrix(rsa_group.obj.diff(:,lag));
+rsa_diff = cell2matrx(rsa_group.obj.diff{lag});
 
 % 1. object same difff
-plt_rsa_obj_sd(rsa_same, rsa_diff, subject, lag, plot_window)
+plt_rsa_sd_obj(rsa_same, rsa_diff, subject, lag, plot_window)
 
 % 2. object diag
-plt_rsa_obj_diag(rsa_same,rsa_diff,subject,lag,plot_window)
+plt_rsa_diag_obj(rsa_same,rsa_diff,subject,lag,plot_window)
 
 %% seq data
-rsa_seq = cell2matrix(rsa_group.seq.same);
-% rsa_seq =tanh(rsa_seq);
+rsa_seq = cell2matrx(rsa_group.seq.same);
 % 3. sequence 
 plt_rsa_sequence(rsa_seq, subject, plot_window)
 
 %% obj2seq data
-[rsa_same, idx] = cell2matrix(rsa_group.obj2seq.same);
-rsa_diff = cell2matrix(rsa_group.obj2seq.diff);
-
 % 4. obj2seq same difff
 plt_rsa_obj2seq_sd(rsa_same,rsa_diff,subject,plot_window)
 
 % 5. obj2seq flatten
-plt_rsa_obj2seq_flatten(rsa_same, rsa_diff, 1, subject, plot_window)
-
-plt_rsa_obj2seq_flatten(rsa_same, rsa_diff, 2, subject, plot_window)
+plt_rsa_obj2seq_region123(rsa_seq_full_group,subject,plot_window,method)
 
 % 6. obj2seq region123
-plt_rsa_obj2seq_region123(rsa_same,subject,plot_window,method)
+plt_rsa_obj2seq_region123(rsa_seq_full_group,subject,plot_window,method)
 
 
 

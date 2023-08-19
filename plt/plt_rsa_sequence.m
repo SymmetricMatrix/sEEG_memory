@@ -11,7 +11,7 @@ function plt_rsa_sequence(rsa_seq, subject, plot_window)
 %   None
 
 figure
-imagesc(rsa_seq) % plot the RSA sequence as an image
+imagesc(mean(rsa_seq,3)); % plot the RSA sequence as an image
 yticks(0:25:250);
 yticklabels([0:25:250]/100); % set y-axis tick labels
 ylabel('Time/s')

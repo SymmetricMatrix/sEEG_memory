@@ -17,12 +17,33 @@ save_dir = [home_dir, 'results/', proj, '/', subject, '/'];
 seeg_pre(sub_id, proj, home_dir, save_dir, ele_excl)
 
 %% rsa
-%proj = 'sequence_memory';% object_recognition  sequence_memory obj2seq
-seeg_rsa(subject, proj)
+proj = 'obj2seq';% object_recognition  sequence_memory obj2seq
+home_dir = '/bigvault/Projects/seeg_pointing/';
+freq =1:46;
 
+for sub_id=1:17
+    subject = ['subject',num2str(sub_id)];
+    read_dir = fullfile(home_dir,'results',proj,subject,'/');
+    save_dir = fullfile(home_dir,'results',proj,subject,'/');
+    mkdir(save_dir)
+    
+    switch proj
+        case 'object_recognition'
+            data1 = load_mat(fullfile(home_dir,'resluts/object_recognition',subject,[subject, '_sw.mat']));
+            data2 = data1;
+        case 'sequence_memory'
+            data1 = load_mat(fullfile(home_dir,'resluts/sequence_memory',subject,[subject, '_sw.mat']));
+            data2 = data1;
+            
+        case 'obj2seq'
+            data1 = load_mat(fullfile(home_dir,'resluts/object_recognition',subject,[subject, '_sequence_sw.mat']));
+            data2 = load_mat(fullfile(home_dir,'resluts/sequence_memory',subject,[subject, '_sequence_sw.mat']));
+    end
+    
+    seeg_rsa( data1, data2, subject, proj, freq, save_dir)
+end
 
 %% result check
-
 
 
 

@@ -9,7 +9,7 @@ dims = ndims(cell_array{1});
 matrix=[];
 idx = [];
 for i = 1:num_cells
-    if ~isempty(cell_array{i})
+    if ~isempty(cell_array{i}) &&  ~all(isnan(cell_array{i}(:)))
         matrix = cat(dims+1, matrix, cell_array{i});
         idx = [idx,i];
     end

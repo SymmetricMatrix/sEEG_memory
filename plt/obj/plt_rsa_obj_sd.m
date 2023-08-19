@@ -1,4 +1,4 @@
-function plt_rsa_sd_obj(rsa_same, rsa_diff, subject, lag, plot_window)
+function plt_rsa_obj_sd(rsa_same, rsa_diff, subject, lag, plot_window)
 % plot object recognition task same and diff picture, contains 4 pictures
 % 1. same picture RSA 
 % 2. different picture RSA

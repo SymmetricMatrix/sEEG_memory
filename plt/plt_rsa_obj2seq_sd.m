@@ -19,15 +19,15 @@ figure
 % Subplot 1: RSA values for same pictures
 subplot(221)
 imagesc(mean(rsa_same,3))
-yticks(0:10:120);
-yticklabels([0:10:120]/100);
+yticks(0:20:200);
+yticklabels([0:20:200]/100);
 ylabel('Object pic /s')
+yline(115,'--')
 xticks(0:50:700);
 xticklabels([-200:50:500]/100);
 xlabel('Sequence pic /s')
-yline(200,'--')
-yline(450,'--')
-yline(650,'--')
+xline(200,'--')
+xline(450,'--')
 title([subject,': same picture RSA'])
 temp2=caxis;
 colorbar()
@@ -35,12 +35,15 @@ colorbar()
 % Subplot 2: RSA values for different pictures
 subplot(222)
 imagesc(mean(rsa_diff,3))
-yticks(0:10:120);
-yticklabels([0:10:120]/100);
+yticks(0:20:200);
+yticklabels([0:20:200]/100);
 ylabel('Object pic /s')
+yline(115,'--')
 xticks(0:50:700);
 xticklabels([-200:50:500]/100);
 xlabel('Sequence pic /s')
+xline(200,'--')
+xline(450,'--')
 title([subject,': different picture RSA (random)'])
 caxis(temp2)
 colorbar()
@@ -48,12 +51,15 @@ colorbar()
 % Subplot 3: Difference between RSA values for same and different pictures
 subplot(223)
 imagesc(mean(rsa_same,3)-mean(rsa_diff,3))
-yticks(0:10:120);
-yticklabels([0:10:120]/100);
+yticks(0:20:200);
+yticklabels([0:20:200]/100);
 ylabel('Object pic /s')
+yline(115,'--')
 xticks(0:50:700);
 xticklabels([-200:50:500]/100);
 xlabel('Sequence pic /s')
+xline(200,'--')
+xline(450,'--')
 title([subject,': same - different'])
 colorbar()
 
@@ -68,12 +74,15 @@ end
 subplot(224)
 % Display the h values of the t-test as an image
 imagesc(pic_corr_h)
-yticks(0:10:120);
-yticklabels([0:10:120]/100);
+yticks(0:20:200);
+yticklabels([0:20:200]/100);
 ylabel('Object pic /s')
+yline(115,'--')
 xticks(0:50:700);
 xticklabels([-200:50:500]/100);
 xlabel('Sequence pic /s')
+xline(200,'--')
+xline(450,'--')
 title([subject,': t-test '])
 c = colorbar;
 c.Ticks = [0, 1]; % set tick values to 0 and 1
@@ -83,8 +92,8 @@ set(gcf, 'Position', plot_window);
 
 % Display the number of subjects or picture pairs used in the analysis
 if strcmp(subject,'Group')
-    text(350,250,['subjects number=',num2str(size(rsa_same,3))],'FontSize',12,'HorizontalAlignment','center');
+    text(350,350,['subjects number=',num2str(size(rsa_same,3))],'FontSize',12,'HorizontalAlignment','center');
 else
-    text(350,250,['picture pair=',num2str(size(rsa_same,3))],'FontSize',12,'HorizontalAlignment','center');
+    text(350,350,['picture pair=',num2str(size(rsa_same,3))],'FontSize',12,'HorizontalAlignment','center');
 end
 end
