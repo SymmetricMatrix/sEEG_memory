@@ -120,3 +120,24 @@ data_pre.trial{1}=[data_pre1.trial{1};data_pre2.trial{1}];
 data_pre.label=[data_pre1.label;data_pre2.label];
 data_pre.cfg.channel=data.cfg.channel;
 data_pre.cfg.previous.channel=data.cfg.channel;
+
+%% sequence
+trigger=trigger-trigger(1);
+trigger = abs(trigger);
+
+right = [0:6,11:28,51:68];
+trigger_idx = tabulate(trigger);
+trigger_idx = sort(trigger_idx(:,1));
+if length(trigger_idx)==length(right)
+    for i =1:length(right)
+        trigger(trigger==trigger_idx(i))=right(i);
+        
+    end
+end
+
+plot(trigger)
+
+data_trigger.trial{1, 1} =trigger;
+
+
+

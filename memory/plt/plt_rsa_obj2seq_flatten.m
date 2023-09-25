@@ -42,8 +42,8 @@ if time_dim == 1
     xlabel('Sequence pic /s')
     title([subject,': RSA between sequence and object(Sequence)'])
 elseif time_dim == 2
-    xticks(0:10:120);
-    xticklabels([0:10:120]/100);
+    xticks(0:10:200);
+    xticklabels([-50:10:150]/100);
     xlabel('Object pic /s')
     title([subject,': RSA between sequence and object(Object)'])
 end
@@ -62,8 +62,8 @@ if time_dim == 1
     xlabel('Sequence pic /s')
     title([subject,': RSA same-diff(Sequence)'])
 elseif time_dim == 2
-    xticks(0:10:120);
-    xticklabels([0:10:120]/100);
+    xticks(0:10:200);
+    xticklabels([-50:10:150]/100);
     xlabel('Object pic /s')
     title([subject,': RSA same-diff(Object)'])
 end

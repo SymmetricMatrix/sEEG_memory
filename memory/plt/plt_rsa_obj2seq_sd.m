@@ -22,7 +22,8 @@ imagesc(mean(rsa_same,3))
 yticks(0:20:200);
 yticklabels([0:20:200]/100);
 ylabel('Object pic /s')
-yline(115,'--')
+yline(50,'--')
+yline(165,'--')
 xticks(0:50:700);
 xticklabels([-200:50:500]/100);
 xlabel('Sequence pic /s')
@@ -35,10 +36,11 @@ colorbar()
 % Subplot 2: RSA values for different pictures
 subplot(222)
 imagesc(mean(rsa_diff,3))
-yticks(0:20:200);
-yticklabels([0:20:200]/100);
+yticks(0:10:200);
+yticklabels([-50:10:150]/100);
 ylabel('Object pic /s')
-yline(115,'--')
+yline(50,'--')
+yline(165,'--')
 xticks(0:50:700);
 xticklabels([-200:50:500]/100);
 xlabel('Sequence pic /s')
@@ -51,10 +53,11 @@ colorbar()
 % Subplot 3: Difference between RSA values for same and different pictures
 subplot(223)
 imagesc(mean(rsa_same,3)-mean(rsa_diff,3))
-yticks(0:20:200);
-yticklabels([0:20:200]/100);
+yticks(0:10:200);
+yticklabels([-50:10:150]/100);
 ylabel('Object pic /s')
-yline(115,'--')
+yline(50,'--')
+yline(165,'--')
 xticks(0:50:700);
 xticklabels([-200:50:500]/100);
 xlabel('Sequence pic /s')
@@ -74,10 +77,11 @@ end
 subplot(224)
 % Display the h values of the t-test as an image
 imagesc(pic_corr_h)
-yticks(0:20:200);
-yticklabels([0:20:200]/100);
+yticks(0:10:200);
+yticklabels([-50:10:150]/100);
 ylabel('Object pic /s')
-yline(115,'--')
+yline(50,'--')
+yline(165,'--')
 xticks(0:50:700);
 xticklabels([-200:50:500]/100);
 xlabel('Sequence pic /s')

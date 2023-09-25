@@ -58,11 +58,14 @@ idx = find(h(3,:) == 1);
 plot(idx, ones(size(idx))*plt_sig*1.2, '*', 'MarkerSize',3.5,'MarkerFaceColor',yellow,'MarkerEdgeColor', yellow)
 
 % Add legend and labels
-legend('-2-0s','','2.5-3s','','3-5s','','Location','SouthEast')
+
 ylabel('Correlation')
-xticks(0:20:250);
-xticklabels([0:20:250]/100);
+xticks(0:10:200);
+xticklabels([-50:10:150]/100);
 xlabel('Picture present /s')
+xline(50,'--')
+xline(165,'--')
+legend('-2~0s','','2.5~3s','','3~5s','','Location','SouthEast')
 title([subject, ': Sequence correlation ', method])
 
 subplot(122)
@@ -88,20 +91,19 @@ end
 
 % Plot significant correlations as an image
 imagesc(h)
-xticks(0:20:250);
-xticklabels([0:20:250]/100);
-yticks(0:20:ylims);
-yticklabels([0:20:ylims]/100);
-ylabel('Object present/s')
-xlabel('Sequence present/s')
+xticks(0:10:200);
+xticklabels([-50:10:150]/100);
+yticks(0:10:200);
+yticklabels([-50:10:150]/100);
+ylabel('Object (sequence -2~0s)/s')
+xlabel('Object (sequence 3~5s)/s')
+xline(50,'--')
+xline(165,'--')
+yline(50,'--')
+yline(165,'--')
 title([subject, ': Sequence ', method, ' -2-0s vs 3-5s (p<0.05)'])
 axis square
 set(gcf, 'Position', plot_window);
 
-% Add text to the plot
-if strcmp(subject,'Group')
-    text(820,143,['Subjects number=',num2str(size(rsa_seq_full_group,3))],'FontSize',12,'HorizontalAlignment','center');
-else
-    text(820,143,['Picture pair=',num2str(size(rsa_seq_full_group,3))],'FontSize',12,'HorizontalAlignment','center');
-end
+
 end

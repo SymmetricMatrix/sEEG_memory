@@ -1,39 +1,38 @@
-%% plot electrode position
-%
-fieldtrip_dir =  '/konglab/home/xicwan/toolbox/fieldtrip/';
-transparency = 0.2;
-fig = figure;
-% adding MNI brain plot
-load(fullfile(fieldtrip_dir,'template','anatomy','surface_pial_left.mat'),'mesh');
-ft_plot_mesh(mesh);
-load(fullfile(fieldtrip_dir,'template','anatomy','surface_pial_right.mat'),'mesh');
-ft_plot_mesh(mesh);
-title('colin27 MNI brain')
+%% setting parameter
+location_name = 'Whole Brain'%'Rolandic_Oper L';
+transparency = 0.1;
+% load  contacts
+contacts = readtable('/bigvault/Projects/seeg_pointing/gather/Tabel/contacts.csv');
+%contacts = contacts(strcmp(contacts.AAL3,location_name),:);
 
-view_angle = [0 90];
-alpha(transparency)
-view(view_angle);
-material dull;
-lighting gouraud;
-camlight;
-rotate3d on
-hold on
+CData=[];
+sub_ids = unique(contacts.sub_id);
+colors = jet(length(sub_ids));
+for i = 1:length(sub_ids)
+    color_idx = find(contacts.sub_id==sub_ids(i));
+    CData(color_idx,:) = repmat(colors(i,:),length(color_idx),1);
+end
 
+figure
+subplot(2, 2, 1);
+view_angle = [270, 0];
+plot_brain_electrode(contacts, location_name, transparency, view_angle,CData)
+subplot(2, 2, 2);
+view_angle = [0, 0]; 
+plot_brain_electrode(contacts, location_name, transparency, view_angle,CData)
+subplot(2, 2, 3);
+view_angle = [0, 90]; 
+plot_brain_electrode(contacts, location_name, transparency, view_angle,CData)
 
-%% load sEEG loction
-contacts=readtable('/bigvault/Projects/seeg_pointing/gather/Tabel/contacts.csv');
-numCoords=str2coord(contacts.MNI);
+% set colorbar
+legend_labels = cellstr(strcat('subject', string(sub_ids)'));
+colormap(colors)
+c = colorbar('Position', [0.92 0.1 0.02 0.8]);
+c.Ticks = linspace(0,1,length(sub_ids));
+c.TickLabels = legend_labels;
+sgtitle(['colin27 MNI brain: ',strrep(location_name, '_', ' ')])
 
-
-
-%% plot sEEG
-e_size = 50;          
-cmap = [0,0,0]; 
-e = numCoords;
-fig = scatter3(e(:,1), e(:,2), e(:,3), ...
-'o', 'filled', ...
-'SizeData', e_size, ...
-'MarkerEdgeColor','k');
-
-fig.CData = cmap;
-  
+% Set the figure position to the screen size
+set(gcf, 'Position', get(0, 'ScreenSize'));
+% Maximize the figure window
+set(gcf, 'WindowState', 'maximized');

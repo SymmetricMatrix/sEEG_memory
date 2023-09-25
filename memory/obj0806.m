@@ -1,4 +1,6 @@
-clc
+
+
+jjnnclc
 clear
 %% parameter setting
 home_dir='/bigvault/Projects/seeg_pointing/';
