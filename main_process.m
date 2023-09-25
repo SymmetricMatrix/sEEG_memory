@@ -9,6 +9,7 @@ proj = 'object_recognition';% object_recognition  sequence_memory
 ele_excl=readtable('/bigvault/Projects/seeg_pointing/gather/Tabel/label.csv');
 home_dir = '/bigvault/Projects/seeg_pointing/';
 
+%% preprocess
 for sub_id =20:27 %[1,9,16] 9
     try
         subject = ['subject',num2str(sub_id)];
@@ -28,8 +29,6 @@ for sub_id =20:27 %[1,9,16] 9
     end
 end
 %% rsa
-proj = 'obj2seq';% object_recognition  sequence_memory obj2seq
-home_dir = '/bigvault/Projects/seeg_pointing/';
 freq =1:46;
 
 for sub_id=1:27
@@ -55,7 +54,14 @@ for sub_id=1:27
 end
 
 %% result check
+subject='group';
 
+plot_window=[1 25 1920 1080];
+
+red=[217 83 25]/255;
+blue=[0 114 189]/255;
+deep_red = [236 43 36]/255;
+deep_blue = [29 65 121]/255;
 
 
 %% Load this subject data into the group
@@ -67,14 +73,4 @@ rsa_group.same(:,:,sub_position) = rsa;
 rsa_group.diff(sub_position) = sub_id;
 rsa_group.sub_id(sub_position) = sub_id;
 
-
-%% plot
-subject='group';
-
-plot_window=[1 25 1920 1080];
-
-red=[217 83 25]/255;
-blue=[0 114 189]/255;
-deep_red = [236 43 36]/255;
-deep_blue = [29 65 121]/255;
 
