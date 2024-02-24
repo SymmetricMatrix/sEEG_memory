@@ -1,4 +1,4 @@
-function plot_brain_electrode(contacts, location_name, transparency, view_angle, CData)
+function plot_brain_electrode(contacts, transparency, view_angle, CData)
 % plot colin27 MNI brain and electrode position
 % Input: 
 %     contacts:       contacts tables in '/bigvault/Projects/seeg_pointing/gather/Tabel/contacts.csv'
@@ -29,14 +29,14 @@ hold on
 numCoords = str2coord(contacts.MNI);
 
 % plot sEEG
-e_size = 10;
+e_size = 7;
 e = numCoords;
 
 % Plot sEEG locations as scatter points with colors based on sub_id
 fig = scatter3(e(:,1), e(:,2), e(:,3), ...
     'o', 'filled', ...
     'SizeData', e_size, ...
-    'MarkerEdgeColor','k','CData',CData);
+    'CData',CData);%'MarkerEdgeColor','k'
 
 %title(['colin27 MNI brain: ',strrep(location_name, '_', ' ')])
 end

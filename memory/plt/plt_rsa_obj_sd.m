@@ -17,7 +17,6 @@ function plt_rsa_obj_sd(rsa_same, rsa_diff, subject, lag, plot_window)
 
 % Create a figure with four subplots
 figure
-
 subplot(221)
 % Display the mean of rsa_same as an image
 imagesc(mean(rsa_same,3))
@@ -60,16 +59,16 @@ axis square
 colorbar()
 
 % Perform t-test on rsa_same and rsa_diff
-pic_corr_h=[];
+pic_corr_p=[];
 for i=1:size(rsa_same,1)
     for j=1:size(rsa_same,2)
-        [pic_corr_h(i,j),~]=ttest(squeeze(rsa_same(i,j,:)),squeeze(rsa_diff(i,j,:)));
+        [~,pic_corr_p(i,j)]=ttest(squeeze(rsa_same(i,j,:)),squeeze(rsa_diff(i,j,:)));
     end
 end
 
 subplot(224)
 % Display the h values of the t-test as an image
-imagesc(pic_corr_h)
+imagesc(pic_corr_p<0.05)
 yticks(0:25:200);
 yticklabels([-50:25:150]/100);
 ylabel('1st present pic /s')

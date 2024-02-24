@@ -24,74 +24,78 @@ yticklabels([0:20:200]/100);
 ylabel('Object pic /s')
 yline(50,'--')
 yline(165,'--')
-xticks(0:50:700);
-xticklabels([-200:50:500]/100);
+xticks(0:50:750);
+xticklabels([-250:50:500]/100);
 xlabel('Sequence pic /s')
-xline(200,'--')
-xline(450,'--')
+xline(250,'--')
+xline(500,'--')
 title([subject,': same picture RSA'])
 temp2=caxis;
 colorbar()
+daspect([1 1 1]);
 
 % Subplot 2: RSA values for different pictures
 subplot(222)
 imagesc(mean(rsa_diff,3))
-yticks(0:10:200);
-yticklabels([-50:10:150]/100);
+yticks(0:20:200);
+yticklabels([-50:20:150]/100);
 ylabel('Object pic /s')
 yline(50,'--')
 yline(165,'--')
-xticks(0:50:700);
-xticklabels([-200:50:500]/100);
+xticks(0:50:750);
+xticklabels([-250:50:500]/100);
 xlabel('Sequence pic /s')
-xline(200,'--')
-xline(450,'--')
+xline(250,'--')
+xline(500,'--')
 title([subject,': different picture RSA (random)'])
 caxis(temp2)
 colorbar()
+daspect([1 1 1]);
 
 % Subplot 3: Difference between RSA values for same and different pictures
 subplot(223)
 imagesc(mean(rsa_same,3)-mean(rsa_diff,3))
-yticks(0:10:200);
-yticklabels([-50:10:150]/100);
+yticks(0:20:200);
+yticklabels([-50:20:150]/100);
 ylabel('Object pic /s')
 yline(50,'--')
 yline(165,'--')
-xticks(0:50:700);
-xticklabels([-200:50:500]/100);
+xticks(0:50:750);
+xticklabels([-250:50:500]/100);
 xlabel('Sequence pic /s')
-xline(200,'--')
-xline(450,'--')
+xline(250,'--')
+xline(500,'--')
 title([subject,': same - different'])
 colorbar()
+daspect([1 1 1]);
 
 % Perform t-test on rsa_same and rsa_diff
 pic_corr_h=[];
+p=[];
 for i=1:size(rsa_same,1)
     for j=1:size(rsa_same,2)
-        [pic_corr_h(i,j),~]=ttest(squeeze(rsa_same(i,j,:)),squeeze(rsa_diff(i,j,:)));
+        [pic_corr_h(i,j),p(i,j)]=ttest(squeeze(rsa_same(i,j,:)),squeeze(rsa_diff(i,j,:)));
     end
 end
+p(p>=0.05)= nan;
 
 subplot(224)
 % Display the h values of the t-test as an image
-imagesc(pic_corr_h)
-yticks(0:10:200);
-yticklabels([-50:10:150]/100);
+imagesc(p)
+yticks(0:20:200);
+yticklabels([-50:20:150]/100);
 ylabel('Object pic /s')
 yline(50,'--')
 yline(165,'--')
-xticks(0:50:700);
-xticklabels([-200:50:500]/100);
+xticks(0:50:750);
+xticklabels([-250:50:500]/100);
 xlabel('Sequence pic /s')
-xline(200,'--')
-xline(450,'--')
+xline(250,'--')
+xline(500,'--')
 title([subject,': t-test '])
 c = colorbar;
-c.Ticks = [0, 1]; % set tick values to 0 and 1
-c.TickLabels = {'p>0.05', 'p<0.05'};
-
+caxis([-max(abs(caxis)), max(abs(caxis))]);
+daspect([1 1 1]);
 set(gcf, 'Position', plot_window);
 
 % Display the number of subjects or picture pairs used in the analysis

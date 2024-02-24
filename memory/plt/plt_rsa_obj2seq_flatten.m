@@ -37,8 +37,8 @@ plot_ci(rsa_same', red, 0.09)
 hold on
 plot_ci(rsa_diff', blue, 0.09)
 if time_dim == 1 
-    xticks(0:50:700);
-    xticklabels([-200:50:500]/100);
+    xticks(0:50:750);
+    xticklabels([-250:50:500]/100);
     xlabel('Sequence pic /s')
     title([subject,': RSA between sequence and object(Sequence)'])
 elseif time_dim == 2

@@ -10,7 +10,7 @@ contacts=readtable('/bigvault/Projects/seeg_pointing/gather/Tabel/contacts.csv')
 tic
 data = [];% data,sample_rate,error,decision_time
 k = 1;
-for sub_id = 1:27
+for sub_id =27:38
     subject = strcat('subject', num2str(sub_id));
     try
         % get srate and label labels
@@ -33,26 +33,39 @@ for sub_id = 1:27
             pointing_error = table2array(pointing(pointing.sub_id==sub_id & pointing.trial==trial, {'error'}));
             
             % get label name and location of contacts
+            sub_contacts = contacts(contacts.sub_id==sub_id &(contacts.AAL3_prob> 0.25)& (contacts.lab_inside == 1),:);
             label_name = labels{label_id};
             loc = strsplit(label_name, '-');
-            loc1 = table2array(contacts(contacts.sub_id==sub_id & strcmp(contacts.lab_bs, loc{1}), {'AAL3'}));
-            loc2 = table2array(contacts(contacts.sub_id==sub_id & strcmp(contacts.lab_bs, loc{2}), {'AAL3'}));
+            loc1 = table2array(sub_contacts(strcmp(sub_contacts.lab_bs, loc{1}), {'AAL3'}));
+            loc2 = table2array(sub_contacts(strcmp(sub_contacts.lab_bs, loc{2}), {'AAL3'}));
+            seeg = data_epoch{label_id,trial};
             
             % store the extracted information in the data cell array
-            if ~isempty(data_epoch{label_id,trial}) % exclude empty trials
-                data{k,1} = sub_id;
-                data{k,2} = srate;
-                data{k,3} = trial;
-                data{k,4} = label_id;
-                data{k,5} = label_name;
-                data{k,6} = loc1{1};
-                data{k,7} = loc2{1};
-                data{k,8} = pointing_time;
-                data{k,9} = pointing_error;
-                data{k,10} = table2array(contacts(contacts.sub_id==sub_id & strcmp(contacts.lab_bs, loc{1}), {'lab_excl_nav'}));
-                data{k,11} = table2array(contacts(contacts.sub_id==sub_id & strcmp(contacts.lab_bs, loc{2}), {'lab_excl_nav'}));
-                data{k,12} = data_epoch{label_id,trial};
-                k=k+1;
+            if (~isempty(loc1)) && (~isempty(loc2)) && (~isempty(seeg))
+                if srate == 2048
+                    seeg =downsample(seeg,4);
+                end
+                kurt = kurtosis(seeg);
+                if (~isempty(seeg)) && strcmp(loc1{1},loc2{1}) && (kurt<5)% exclude empty trials
+                    data{k,1} = sub_id;
+                    data{k,2} = srate;
+                    data{k,3} = trial;
+                    data{k,4} = label_id;
+                    data{k,5} = label_name;
+                    data{k,6} = loc1{1};
+                    data{k,7} = table2array(sub_contacts(strcmp(sub_contacts.lab_bs, loc{1}), {'AAL3_prob'}));
+                    data{k,8} = table2array(sub_contacts(strcmp(sub_contacts.lab_bs, loc{1}), {'MNI'}));
+                    data{k,9} = loc2{1};
+                    data{k,10} = table2array(sub_contacts(strcmp(sub_contacts.lab_bs, loc{2}), {'AAL3_prob'}));
+                    data{k,11} = table2array(sub_contacts(strcmp(sub_contacts.lab_bs, loc{2}), {'MNI'}));
+                    data{k,12} = pointing_time;
+                    data{k,13} = pointing_error;
+                    data{k,14} = table2array(contacts(contacts.sub_id==sub_id & strcmp(contacts.lab_bs, loc{1}), {'lab_excl_nav'}));
+                    data{k,15} = table2array(contacts(contacts.sub_id==sub_id & strcmp(contacts.lab_bs, loc{2}), {'lab_excl_nav'}));
+                    data{k,16} = kurt;
+                    data{k,17} = seeg;
+                    k=k+1;
+                end
             end
         end
         
@@ -67,8 +80,31 @@ end
 toc
 
 
-data = cell2table(data,'VariableNames', {'sub_id', 'srate','trial','label_idx','label','location1','location2','pointing_time', 'pointing_error','lab_excl_nav1','lab_excl_nav2','seeg'});
+data = cell2table(data,'VariableNames', {'sub_id', 'srate','trial','label_idx','label','location1','loc1_prob','loc1_mni','location2','loc2_prob','loc2_mni','pointing_time', 'pointing_error','lab_excl_nav1','lab_excl_nav2','kurt','seeg'});
+%%
+save(['/bigvault/Projects/seeg_pointing/results/3dpointing/machine_learning/2024/data_512_2.mat'],'data','-v7.3' )
+
+jsonStr = jsonencode(data);
+fid = fopen(['/bigvault/Projects/seeg_pointing/results/3dpointing/machine_learning/2024/data_512_2.json'], 'w');
+fprintf(fid, '%s', jsonStr);
+fclose(fid);
 %writetable(data(:,1:11),'/konglab/home/xicwan/big_data/data_start_info.csv')
+%%
+data2_info = data2(:,1:17);
+data2_seeg = squeeze(cell2matrix(table2cell(data2(:,18))))';
+save(['/bigvault/Projects/seeg_pointing/results/3dpointing/machine_learning/subject/data2.mat'],'data2_info')                                    
+save(['/bigvault/Projects/seeg_pointing/results/3dpointing/machine_learning/subject/data2_seeg.mat'],'data2_seeg')
+
+data4_info = data4(:,1:17);
+data4_seeg = squeeze(cell2matrix(table2cell(data4(:,18))))';
+save(['/bigvault/Projects/seeg_pointing/results/3dpointing/machine_learning/subject/data4.mat'],'data4_info')
+save(['/bigvault/Projects/seeg_pointing/results/3dpointing/machine_learning/subject/data4_seeg.mat'],'data4_seeg')
+
+data6_info = data6(:,1:17);
+data6_seeg = squeeze(cell2matrix(table2cell(data6(:,18))))';
+save(['/bigvault/Projects/seeg_pointing/results/3dpointing/machine_learning/subject/data6.mat'],'data6_info')
+save(['/bigvault/Projects/seeg_pointing/results/3dpointing/machine_learning/subject/data6_seeg.mat'],'data6_seeg')
+
 %%
 % Filter data where location1 and location2 are equal
 %data1 = data(strcmp(data.location1, data.location2), :);
@@ -89,7 +125,6 @@ writetable(data_locatin,['/bigvault/Projects/seeg_pointing/results/3dpointing/ma
 %writetable(ans, '/konglab/home/xicwan/big_data/data_start.json', 'FileType', 'json');
 
 for i=1:5
-    %jsonStr = jsonencode(data((i-1)*10000+1:i*10000,:));
     jsonStr = jsonencode(data(50001:end,:));
     fid = fopen(['/konglab/home/xicwan/big_data/data_start',num2str(i),'.json'], 'w');
     fprintf(fid, '%s', jsonStr);
@@ -125,7 +160,7 @@ location_name =  location_names{1}
 load(['/bigvault/Projects/seeg_pointing/results/3dpointing/machine_learning/',trial_position,'_',strrep(location_name, ' ', '_'),'_SPRiNT.mat'])
 s_512 = s.s_512;
 s_2048 = s.s_2048 ;
-figure 
+figure
 subplot(211)
 plotSPRiNT(s_512, s_2048, location_name, 'pdf')
 subplot(212)

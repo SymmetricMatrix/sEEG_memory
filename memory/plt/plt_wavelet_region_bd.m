@@ -14,7 +14,7 @@ function plt_wavelet_region_bd(boundary_data, non_boundary_data, subject, plot_w
 %
 % output: 
 %   none
-time = [-1,3.5];
+time = [-2.5,5];
 time_point = size(boundary_data,2);
 srate= time_point/(time(2)-time(1));
 % Create a figure with four subplots

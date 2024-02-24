@@ -15,11 +15,12 @@ red = [217 83 25]/255;
 blue = [0 114 189]/255;
 yellow = [249 172 50]/255;
 
+seq_pre = 1:200;  % original [-5,7], save [-2.5,5], pre interval [-2.5,-0.5]
+seq_after = 501:700;
 
 % Calculate mean correlation for each region
-region1 = squeeze(mean(rsa_seq_full_group(:,1:200,:),2));
-region2 = squeeze(mean(rsa_seq_full_group(:,451:500,:),2));
-region3 = squeeze(mean(rsa_seq_full_group(:,501:700,:),2));
+region1 = squeeze(mean(rsa_seq_full_group(:,seq_pre,:),2));
+region2 = squeeze(mean(rsa_seq_full_group(:,seq_after,:),2));
 
 ylims = size(rsa_seq_full_group,1);
 
@@ -29,34 +30,24 @@ subplot(121)
 plot_ci(region1', red, 0.05)
 hold on
 plot_ci(region2', yellow, 0.05)
-plot_ci(region3', blue, 0.05)
 
 % Find significant correlations using the specified method
-plt_sig = max(mean([region1;region2;region3],2));
+plt_sig = max(mean([region1;region2],2));
 p = [];
 h = [];
 if strcmp(method,'sigrank')
     for i = 1:size(region1,1)
         [p(1,i),h(1,i)] = signrank(region1(i,:), region2(i,:));
-        [p(2,i),h(2,i)] = signrank(region1(i,:), region3(i,:));
-        [p(3,i),h(3,i)] = signrank(region2(i,:), region3(i,:));
     end
 elseif strcmp(method,'ttest')
     for i = 1:size(region1,1)
         [h(1,i),p(1,i)] = ttest2(region1(i,:), region2(i,:));
-        [h(2,i),p(2,i)] = ttest2(region1(i,:), region3(i,:));
-        [h(3,i),p(3,i)] = ttest2(region2(i,:), region3(i,:));
     end
 end
 
 % Plot significant correlations as stars
 idx = find(h(1,:) == 1);
 plot(idx, ones(size(idx))*plt_sig*1.1, '*', 'MarkerSize',3.5,'MarkerFaceColor',red,'MarkerEdgeColor', red)
-idx = find(h(2,:) == 1);
-plot(idx, ones(size(idx))*plt_sig*1.3, '*', 'MarkerSize',3.5,'MarkerFaceColor',blue,'MarkerEdgeColor', blue)
-idx = find(h(3,:) == 1);
-plot(idx, ones(size(idx))*plt_sig*1.2, '*', 'MarkerSize',3.5,'MarkerFaceColor',yellow,'MarkerEdgeColor', yellow)
-
 % Add legend and labels
 
 ylabel('Correlation')
@@ -65,7 +56,7 @@ xticklabels([-50:10:150]/100);
 xlabel('Picture present /s')
 xline(50,'--')
 xline(165,'--')
-legend('-2~0s','','2.5~3s','','3~5s','','Location','SouthEast')
+legend('pre','','after','','Location','SouthEast')
 title([subject, ': Sequence correlation ', method])
 
 subplot(122)

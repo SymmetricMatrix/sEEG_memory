@@ -6,12 +6,16 @@ function add_subject_into_group(home_dir, sub_id, proj)
 % - sub_id: the ID of the subject to add
 % - proj: the name of the project ('object_recognition', 'sequence_memory', or 'obj2seq')
 %
-% Outputs: none
+% Outputs: 
+%  rsa_obj_group {same, diff, label ,sub_id} diff has 20
+%  rsa_seq_group {same, label ,sub_id} 
+%  rsa_obj2seq_group {same, diff, label ,sub_id} diff has 20
+subject = ['subject',num2str(sub_id)];
 
 switch proj
     case 'object_recognition'
         % Load subject-level RSA data
-        load(fullfile(home_dir, 'results', proj, sub_id, [sub_id, '_obj_rsa.mat']), 'rsa')
+        load(fullfile(home_dir, 'results', proj, subject, [subject, '_obj_rsa.mat']), 'rsa')
         
         % Load group-level RSA data
         load(fullfile(home_dir, 'results', proj, 'rsa_obj_group.mat'), 'rsa_group')
@@ -24,7 +28,8 @@ switch proj
             diff_temp(:, :, sub_position) = mean(rsa.diff{lag}, 3);
             rsa_group.diff{lag} = diff_temp;
         end
-        rsa_group.label{sub_position} = rsa.label;
+        rsa_group.label.same{sub_position} = rsa.label.same;
+        rsa_group.label.diff{sub_position} = rsa.label.diff;
         rsa_group.sub_id(sub_position) = sub_id;
         
         % Save group-level RSA data
@@ -33,7 +38,7 @@ switch proj
     
     case 'sequence_memory'
         % Load subject-level RSA data
-        load(fullfile(home_dir, 'results', proj, sub_id, [sub_id, '_seq_rsa.mat']), 'rsa')
+        load(fullfile(home_dir, 'results', proj, subject, [subject, '_seq_rsa.mat']), 'rsa')
         
         % Load group-level RSA data
         load(fullfile(home_dir, 'results', proj, 'rsa_seq_group.mat'), 'rsa_group')
@@ -50,7 +55,7 @@ switch proj
 
     case 'obj2seq'
         % Load subject-level RSA data
-        load(fullfile(home_dir, 'results', proj, sub_id, [sub_id, '_obj2seq_rsa.mat']), 'rsa')
+        load(fullfile(home_dir, 'results', proj, subject, [subject, '_obj2seq_rsa.mat']), 'rsa')
         
         % Load group-level RSA data
         load(fullfile(home_dir, 'results', proj, 'rsa_obj2seq_group.mat'), 'rsa_group')
@@ -59,7 +64,9 @@ switch proj
         sub_position = length(rsa_group.sub_id) + 1;
         rsa_group.same(:, :, sub_position) = mean(rsa.same, 3);
         rsa_group.diff(:, :, sub_position) = mean(rsa.diff, 3);
-        rsa_group.label{sub_position} = rsa.label;
+        rsa_group.label.same{sub_position} = rsa.label.same;
+        rsa_group.label.diff{sub_position} = rsa.label.diff;
+        rsa_group.trials{sub_position} = size(rsa.same, 3);
         rsa_group.sub_id(sub_position) = sub_id;
         
         % Save group-level RSA data

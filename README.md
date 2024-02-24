@@ -2,7 +2,7 @@
 
 ## Main Parts
 1. iEEG visualization - `ieeg_viz`
-2. iEEG preprocess - in this folder
+2. iEEG preprocess - in main folder
 3. Navigation task - `navigation`
 4. Memory task - `memory`
 
@@ -16,11 +16,11 @@ Before running this code, make sure you have completed the following steps:
 1. `check_data.m`
    Check trigger and channel label in EDF file
 2. `main_process.m`
-The main preprocessing scripts include the following step:
+The main preprocessing scripts include the following step: \n
 a. iEEG data preprocess: `seeg_pre.m`
     - `pre_filter.m`
     - `pre_epoch.m`
-    - `pre_sw.m`
+    - `pre_sw.m` \n
 b. Calculate Representational similarity: `seeg_rsa`
 3. Result check
 4. Load this subject data into the group:

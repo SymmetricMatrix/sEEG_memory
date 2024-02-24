@@ -16,7 +16,7 @@ sub_ids = table2array(unique(pointing(~isnan(pointing.error),{'sub_id'})));
 idx = ~(sub_ids == 5 | sub_ids == 11);
 sub_ids = sub_ids(idx);
 
-for sub_id = [6,8,15,16]
+for sub_id = 30
     try
         subject = ['subject',num2str(sub_id)];
         save_dir = [home_dir, 'results/3dpointing/', subject, '/'];

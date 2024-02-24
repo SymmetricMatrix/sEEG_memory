@@ -1,5 +1,6 @@
 %% plot ieeg main
 % created 20220225 | SS
+% edit 20231005 | wxcw
 clear all; close all; clc
 
 % make sure fieldtrip is added to path

@@ -2,9 +2,9 @@
 % subdir: path to subject directory
 % mrfile: path to subject MR_acpc.nii
 
-sub_id=19;
+sub_id=27;
 num_sub = length(sub_id);
-parfor i=1:num_sub
+for i=1:num_sub
     subject = ['subject',num2str(sub_id(i))];
     fshome = '/konglab/apps/freesurfer/';
     subdir = ['/bigvault/Projects/seeg_pointing/subject/',subject,'/freesurfer'];

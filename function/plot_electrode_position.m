@@ -1,9 +1,12 @@
 %% setting parameter
-location_name = 'Whole Brain'%'Rolandic_Oper L';
+location_name = 'Temporal_Mid L';%'Rolandic_Oper L';
 transparency = 0.1;
+sub_ids = [3,4,6,7,8,9,12:17,19:26];
+
 % load  contacts
 contacts = readtable('/bigvault/Projects/seeg_pointing/gather/Tabel/contacts.csv');
-%contacts = contacts(strcmp(contacts.AAL3,location_name),:);
+contacts = contacts(ismember(contacts.sub_id,sub_ids) & contains(contacts.AAL3,location_name),:);
+
 
 CData=[];
 sub_ids = unique(contacts.sub_id);
@@ -14,15 +17,15 @@ for i = 1:length(sub_ids)
 end
 
 figure
-subplot(2, 2, 1);
+%subplot(2, 2, 1);
 view_angle = [270, 0];
-plot_brain_electrode(contacts, location_name, transparency, view_angle,CData)
-subplot(2, 2, 2);
-view_angle = [0, 0]; 
-plot_brain_electrode(contacts, location_name, transparency, view_angle,CData)
-subplot(2, 2, 3);
-view_angle = [0, 90]; 
-plot_brain_electrode(contacts, location_name, transparency, view_angle,CData)
+plot_brain_electrode(contacts, transparency, view_angle,CData)
+% subplot(2, 2, 2);
+% view_angle = [0, 0]; 
+% plot_brain_electrode(contacts, transparency, view_angle,CData)
+% subplot(2, 2, 3);
+% view_angle = [0, 90]; 
+% plot_brain_electrode(contacts, transparency, view_angle,CData)
 
 % set colorbar
 legend_labels = cellstr(strcat('subject', string(sub_ids)'));
